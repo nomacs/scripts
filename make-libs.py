@@ -238,12 +238,11 @@ def make(params):
 
     params['install'] = False
 
-    # opencv config
     opencv = OpenCVConfig(params)
     # some script debugging options:
     # opencv.cmakeonly = True
     # opencv.force = True
-    # print(opencv)
+    print(opencv)
     build(opencv)
 
     # Exiv2
@@ -291,6 +290,6 @@ if __name__ == "__main__":
 
     # get the repository path
     if not params['repopath']:
-        params['repopath'] = repopath(sys.argv[0])
+        params['repopath'] = os.path.join(repopath(sys.argv[0]), "3rd-party")
 
     make(params)

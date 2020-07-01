@@ -81,6 +81,6 @@ if __name__ == "__main__":
 
     # get the repository path
     if not params['repopath']:
-        params['repopath'] = repopath(sys.argv[0])
+        params['repopath'] = os.path.join(repopath(sys.argv[0]), "3rd-party", "imageformats")
 
     make(params)
