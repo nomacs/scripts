@@ -53,12 +53,10 @@ class ExifConfig(Config):
     def cmake_args(self):
 
         # tune cmake parameters here
-        args = [
+        args = self.additional_cmake_args + [
             "--clean-first",
-            "-DEXPAT_BUILD_PATH=" + os.path.join(self.libpath, "expat"),
-            "-DEXPAT_INCLUDE_DIR=" + os.path.join(self.repopath, "expat", "lib"),
-            "-DZLIB_INCLUDE_DIR=" + os.path.join(self.repopath, "opencv", "3rdparty", "zlib"),
-            "-DZLIB_BUILD_PATH=" + os.path.join(self.libpath, "opencv", "3rdparty"),
+            "-DEXPAT_BUILD_PATH=" + self.libpath + "/expat",
+            "-DEXPAT_INCLUDE_DIR=" + self.repopath + "/expat/lib",
             "-B" + self.builddir,
             self.srcpath
         ]
@@ -85,7 +83,7 @@ class LibrawConfig(Config):
     def cmake_args(self):
 
         # tune cmake parameters here
-        args = [
+        args = self.additional_cmake_args + [
             "--clean-first",
             "-DENABLE_EXAMPLES=OFF",
             "-B" + self.builddir,
@@ -237,9 +235,15 @@ if __name__ == "__main__":
                         help='build configuration [debug|release]')
     parser.add_argument('--build-dir', dest='builddir', type=str, default="",
                         help='Specify the build directory')
+    parser.add_argument('--configure', action='store_true',
+                        help='configure only')
+
 
     # make args a dict
     params = vars(parser.parse_args())
+
+    if params['configure']:
+        params['cmakeonly'] = True
 
     # get the repository path
     if not params['repopath']:
