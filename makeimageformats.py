@@ -1,15 +1,11 @@
+import os
 from utils.config import Config
+from utils.make import build
 
 class FormatsConfig(Config):
 
     def __init__(self, params, name: str):
         super().__init__(params, name)
-
-    def defaults(self):
-
-
-
-        super().defaults()
 
     def cmake_args(self):
 

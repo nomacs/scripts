@@ -1,3 +1,4 @@
+import os
 from utils.config import Config
 
 class ExpatConfig(Config):
@@ -184,6 +185,7 @@ class OpenCVConfig(Config):
 
 
 def make(params):
+    from utils.make import build
 
     params['install'] = False
 
@@ -191,7 +193,7 @@ def make(params):
     # some script debugging options:
     # opencv.cmakeonly = True
     # opencv.force = True
-    # print(opencv)
+    print(opencv)
     build(opencv)
 
     # Exiv2
@@ -218,7 +220,6 @@ def make(params):
 if __name__ == "__main__":
     import argparse
     import sys
-    import os
     
     from utils.config import repopath
     from utils.make import build

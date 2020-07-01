@@ -1,3 +1,4 @@
+import os
 from utils.config import Config
 
 class NomacsConfig(Config):
@@ -35,10 +36,26 @@ class NomacsConfig(Config):
 
         return args
 
+def make_libs(config):
+    from makelibs import make as ml
+    from makeimageformats import make as mi
+
+    p = dict()
+    p['repopath'] = config.repopath + "/3rd-party"
+    p['qtpath'] = config.qtpath
+
+    ml(p)
+
+    p['repopath'] = config.repopath + "/3rd-party/imageformats"
+    p['builddir'] = config.repopath + "/3rd-party/build/imageformats"
+
+    mi(p)
+
+
+
 if __name__ == "__main__":
     import argparse
     import sys
-    import os
     
     from utils.config import repopath
     from utils.make import build
@@ -54,6 +71,10 @@ if __name__ == "__main__":
                         help='path to the nomacs repository')
     parser.add_argument('--build-dir', dest='builddir', type=str, default="",
                         help='Specify the build directory')
+    parser.add_argument('--build-config', dest='buildconfig', type=str, default="",
+                        help='build configuration [debug|release]')
+    parser.add_argument('--all', action='store_true',
+                        help='build all dependencies')
 
     # make args a dict
     params = vars(parser.parse_args())
@@ -64,6 +85,9 @@ if __name__ == "__main__":
 
 
     c = NomacsConfig(params)
+
+    if params['all']:
+        make_libs(c)
 
     # uncomment for debugging
     print(c)
