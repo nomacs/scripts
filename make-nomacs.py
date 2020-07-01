@@ -1,6 +1,6 @@
 from utils.config import Config
 
-class NmcConfig(Config):
+class NomacsConfig(Config):
 
     def __init__(self, params):
         super().__init__(params, "nomacs")
@@ -63,9 +63,9 @@ if __name__ == "__main__":
         params['repopath'] = repopath(sys.argv[0])
 
 
-    c = NmcConfig(params)
+    c = NomacsConfig(params)
 
     # uncomment for debugging
-    # print(c)
+    print(c)
 
     build(c)

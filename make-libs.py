@@ -103,8 +103,9 @@ class QuazipConfig(Config):
 
     def defaults(self):
     
-        if "srcpath" not in self.__dict__ or not self.srcpath:
-            self.srcpath = os.path.join(self.repopath, self.name)
+        # this is not called 'path' because it won't exist until we call cmake
+        if "builddir" not in self.__dict__ or not self.builddir:
+            self.builddir = os.path.join(self.repopath, "build", self.name)
 
         if "libpath" not in self.__dict__ or not self.libpath:
             self.libpath = os.path.join(self.repopath, "build")
