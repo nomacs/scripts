@@ -41,11 +41,13 @@ def make_libs(config):
     from makeimageformats import make as mi
 
     p = dict()
+    p['buildconfig'] = config.buildconfig
     p['repopath'] = config.repopath + "/3rd-party"
     p['qtpath'] = config.qtpath
 
     ml(p)
 
+    p['buildconfig'] = config.buildconfig
     p['repopath'] = config.repopath + "/3rd-party/imageformats"
     p['builddir'] = config.repopath + "/3rd-party/build/imageformats"
 
