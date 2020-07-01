@@ -148,8 +148,8 @@ class OpenCVConfig(Config):
     def cmake_zlib(self):
 
         args = [
-            "-DZLIB_INCLUDE_DIRS=" + os.path.join(self.srcpath, "3rdparty", "zlib"),
-            "-DZLIB_BUILD_PATH=" + os.path.join(self.builddir, "3rdparty"),
+            "-DZLIB_INCLUDE_DIRS=" + self.srcpath + "/3rdparty/zlib",
+            "-DZLIB_BUILD_PATH=" + self.builddir + "/3rdparty",
         ]
  
         return args
@@ -191,7 +191,7 @@ def make(params):
     # some script debugging options:
     # opencv.cmakeonly = True
     # opencv.force = True
-    print(opencv)
+    # print(opencv)
     build(opencv)
 
     # Exiv2
@@ -210,7 +210,6 @@ def make(params):
     quazip = QuazipConfig(params)
     quazip.additional_cmake_args = opencv.cmake_zlib()
     build(quazip)
-
 
     # uncomment for debugging
     # print(expat)
@@ -238,12 +237,12 @@ if __name__ == "__main__":
     parser.add_argument('--configure', action='store_true',
                         help='configure only')
 
-
     # make args a dict
     params = vars(parser.parse_args())
 
     if params['configure']:
         params['cmakeonly'] = True
+        params['force'] = True
 
     # get the repository path
     if not params['repopath']:

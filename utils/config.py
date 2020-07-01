@@ -5,7 +5,7 @@ class Config(object):
     def __init__(self, params, name: str):
         self.__dict__.update(params)
         self.name = name
-        self.force = False
+
         self.additional_cmake_args = []
 
         self.defaults()
@@ -44,6 +44,10 @@ class Config(object):
         if "binaryfile" not in self.__dict__:
             self.binaryfile = ""
 
+        # if true, we will always rebuild
+        if "force" not in self.__dict__:
+            self.force = False
+
         if "srcpath" not in self.__dict__ or not self.srcpath:
             self.srcpath = os.path.join(self.repopath, self.name)
 
@@ -71,8 +75,6 @@ class Config(object):
         return os.path.isfile(self.binaryfile)
 
 def repopath(arg0: str):
-
-    # return "C:/coding/nomacs/nomacs/3rd-party/imageformats"
 
     relp = os.path.dirname(arg0)
     absp = os.path.abspath(relp)
