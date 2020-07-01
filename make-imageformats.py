@@ -7,12 +7,7 @@ class FormatsConfig(Config):
 
     def defaults(self):
 
-        if "srcpath" not in self.__dict__ or not self.srcpath:
-            self.srcpath = os.path.join(self.repopath, self.name)
 
-        # this is not called 'path' because it won't exist until we call cmake
-        if "builddir" not in self.__dict__ or not self.builddir:
-            self.builddir = os.path.join(self.repopath, "build")
 
         super().defaults()
 
@@ -34,13 +29,14 @@ class FormatsConfig(Config):
 def make(params):
 
     params['install'] = False
+    # params['cmakeonly'] = True
 
     # config libde265 which we need for libheif
     libde265 = FormatsConfig(params, "libde265")
     libde265.builddir = os.path.join(libde265.builddir, libde265.name)
-    libde265.binaryfile = os.path.join(libde265.builddir, "Release", libde265.name + ".dll")
+    libde265.binaryfile = os.path.join(libde265.builddir, libde265.name, "Release", libde265.name + ".dll")
     build(libde265)
-
+    
     # config libheif
     libheif = FormatsConfig(params, "libheif")
     libheif.builddir = os.path.join(libheif.builddir, libheif.name)
@@ -48,15 +44,14 @@ def make(params):
     build(libheif)
     
     # configure image formats
+    params["srcpath"] = params["repopath"]
     imageformats = FormatsConfig(params, "imageformats")
-    imageformats.srcpath = imageformats.repopath
     build(imageformats)
 
     # uncomment for debugging
     # print(libde265)
     # print(libheif)
-    print(imageformats)
-
+    # print(imageformats)
 
 if __name__ == "__main__":
     import argparse
@@ -77,12 +72,19 @@ if __name__ == "__main__":
                         help='build configuration [debug|release]')
     parser.add_argument('--build-dir', dest='builddir', type=str, default="",
                         help='Specify the build directory')
+    parser.add_argument('--nomacs', action='store_true',
+                        help='Specify the build directory')
 
     # make args a dict
     params = vars(parser.parse_args())
 
-    # get the repository path
-    if not params['repopath']:
-        params['repopath'] = os.path.join(repopath(sys.argv[0]), "3rd-party", "imageformats")
+    # configure for in-repo nomacs build
+    if params['nomacs']:
+
+        if not params['repopath']:
+            params['repopath'] = os.path.join(repopath(sys.argv[0]), "3rd-party", "imageformats")
+        if not params['builddir']:
+            params['builddir'] = os.path.join(
+                repopath(sys.argv[0]), "3rd-party", "build", "imageformats")
 
     make(params)

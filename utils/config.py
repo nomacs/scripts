@@ -18,9 +18,11 @@ class Config(object):
 
             p = self.__dict__[key]
 
-            if key.endswith("path") and \
-               not os.path.exists(p):
-                print("[WARNING] %s path does not exist: %s" % (key, p))
+            if key.endswith("path"):
+                if not os.path.exists(p):
+                    print("[WARNING] %s path does not exist: %s" % (key, p))
+                else:
+                    self.__dict__[key] = os.path.abspath(p)
 
     def defaults(self):
 
@@ -40,6 +42,14 @@ class Config(object):
         if "binaryfile" not in self.__dict__:
             self.binaryfile = ""
 
+        if "srcpath" not in self.__dict__ or not self.srcpath:
+            self.srcpath = os.path.join(self.repopath, self.name)
+
+        # this is not called 'path' because it won't exist until we call cmake
+        if "builddir" not in self.__dict__ or not self.builddir:
+            self.builddir = os.path.join(self.repopath, "build")
+        else:
+            self.builddir = os.path.abspath(self.builddir)
 
     def cmake_args(self):
 

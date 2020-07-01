@@ -1,40 +1,5 @@
 from utils.config import Config
 
-class GenericConfig(Config):
-
-    def __init__(self, params, name: str):
-        super().__init__(params, name)
-
-        self.install = False
-
-    def defaults(self):
-
-        if "srcpath" not in self.__dict__ or not self.srcpath:
-            self.srcpath = os.path.join(self.repopath, self.name)
-
-        # this is not called 'path' because it won't exist until we call cmake
-        if "builddir" not in self.__dict__ or not self.builddir:
-            self.builddir = os.path.join(self.repopath, "build", self.name)
-
-        super().defaults()
-
-    def cmake_args(self):
-
-        # tune cmake parameters here
-        args = [
-            "--clean-first",
-            "-DCMAKE_PREFIX_PATH=" + 
-                os.path.join(self.builddir, "libde265") + ";" +
-                os.path.join(self.builddir, "libheif") + ";" +
-                self.qtpath,
-            "-B" + self.builddir,
-            self.srcpath
-        ]
-
-        return args
-
-        return os.path.join(self.builddir, "Release", self.name + ".dll")
-
 class ExpatConfig(Config):
     
     def __init__(self, params):
@@ -44,9 +9,6 @@ class ExpatConfig(Config):
 
     def defaults(self):
     
-        if "srcpath" not in self.__dict__ or not self.srcpath:
-            self.srcpath = os.path.join(self.repopath, self.name)
-
         # this is not called 'path' because it won't exist until we call cmake
         if "builddir" not in self.__dict__ or not self.builddir:
             self.builddir = os.path.join(self.repopath, "build", self.name)
@@ -77,9 +39,6 @@ class ExifConfig(Config):
 
     def defaults(self):
     
-        if "srcpath" not in self.__dict__ or not self.srcpath:
-            self.srcpath = os.path.join(self.repopath, self.name)
-
         if "libpath" not in self.__dict__ or not self.libpath:
             self.libpath = os.path.join(self.repopath, "build")
 
@@ -115,9 +74,6 @@ class LibrawConfig(Config):
 
     def defaults(self):
     
-        if "srcpath" not in self.__dict__ or not self.srcpath:
-            self.srcpath = os.path.join(self.repopath, self.name)
-
         # this is not called 'path' because it won't exist until we call cmake
         if "builddir" not in self.__dict__ or not self.builddir:
             self.builddir = os.path.join(self.repopath, "build", self.name)
@@ -150,14 +106,8 @@ class QuazipConfig(Config):
         if "srcpath" not in self.__dict__ or not self.srcpath:
             self.srcpath = os.path.join(self.repopath, self.name)
 
-        # this is not called 'path' because it won't exist until we call cmake
-        if "builddir" not in self.__dict__ or not self.builddir:
-            self.builddir = os.path.join(self.repopath, "build", self.name)
-
         if "libpath" not in self.__dict__ or not self.libpath:
             self.libpath = os.path.join(self.repopath, "build")
-
-
 
         self.binaryfile = os.path.join(self.builddir, "Release", "quazip5.dll")
 
