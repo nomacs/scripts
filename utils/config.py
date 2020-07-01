@@ -1,14 +1,16 @@
+import os
+
 class Config(object):
 
     def __init__(self, params, name: str):
         self.__dict__.update(params)
         self.name = name
+        self.force = False
 
         self.defaults()
         self.check()
 
     def check(self):
-        import os
 
         # check if all directories exist
         for key in self.__dict__:
@@ -26,12 +28,16 @@ class Config(object):
             self.buildconfig = "debug"
 
         # call install?
-        if "install" not in self.__dict__ or not self.install:
+        if "install" not in self.__dict__:
             self.install = True
 
         # if set to True, we'll run a dry run (only configure cmake)
-        if "cmakeonly" not in self.__dict__ or not self.cmakeonly:
+        if "cmakeonly" not in self.__dict__:
             self.cmakeonly = False
+
+        # if set, we can skip builds
+        if "binaryfile" not in self.__dict__:
+            self.binaryfile = ""
 
 
     def cmake_args(self):
@@ -44,8 +50,16 @@ class Config(object):
                    for key in self.__dict__]
         return "\n".join(keyvals)
 
+    def is_built(self):
+
+        if self.force:
+            return False
+
+        return os.path.isfile(self.binaryfile)
+
 def repopath(arg0: str):
-    import os
+
+    # return "C:/coding/nomacs/nomacs/3rd-party/imageformats"
 
     relp = os.path.dirname(arg0)
     absp = os.path.abspath(relp)

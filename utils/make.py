@@ -2,6 +2,10 @@
 def build(config):
     import subprocess as sp
 
+    if config.is_built():
+        print(config.name + " exists, skipping...")
+        return
+
     cmakeconfig = "cmake " + " ".join(config.cmake_args())
 
     print(cmakeconfig)
