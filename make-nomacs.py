@@ -52,6 +52,8 @@ if __name__ == "__main__":
                         help='additional cmake arguments')
     parser.add_argument('--repo-path', dest='repopath', type=str, default="",
                         help='path to the nomacs repository')
+    parser.add_argument('--build-dir', dest='builddir', type=str, default="",
+                        help='Specify the build directory')
 
     # make args a dict
     params = vars(parser.parse_args())

@@ -284,6 +284,9 @@ if __name__ == "__main__":
                         help='path to the nomacs repository')
     parser.add_argument('--build-config', dest='buildconfig', type=str, default="",
                         help='build configuration [debug|release]')
+    parser.add_argument('--build-dir', dest='builddir', type=str, default="",
+                        help='Specify the build directory')
+
 
     # make args a dict
     params = vars(parser.parse_args())

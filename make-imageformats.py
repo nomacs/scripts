@@ -39,24 +39,24 @@ def make(params):
     libde265 = FormatsConfig(params, "libde265")
     libde265.builddir = os.path.join(libde265.builddir, libde265.name)
     libde265.binaryfile = os.path.join(libde265.builddir, "Release", libde265.name + ".dll")
+    build(libde265)
 
     # config libheif
     libheif = FormatsConfig(params, "libheif")
     libheif.builddir = os.path.join(libheif.builddir, libheif.name)
     libheif.binaryfile = os.path.join(libheif.builddir, "libheif", "Release", "heif.dll")
+    build(libheif)
     
     # configure image formats
     imageformats = FormatsConfig(params, "imageformats")
     imageformats.srcpath = imageformats.repopath
+    build(imageformats)
 
     # uncomment for debugging
     # print(libde265)
     # print(libheif)
     print(imageformats)
 
-    build(libde265)
-    build(libheif)
-    build(imageformats)
 
 if __name__ == "__main__":
     import argparse
@@ -75,6 +75,8 @@ if __name__ == "__main__":
                         help='path to the nomacs repository')
     parser.add_argument('--build-config', dest='buildconfig', type=str, default="",
                         help='build configuration [debug|release]')
+    parser.add_argument('--build-dir', dest='builddir', type=str, default="",
+                        help='Specify the build directory')
 
     # make args a dict
     params = vars(parser.parse_args())
