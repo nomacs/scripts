@@ -6,6 +6,8 @@ def build(config):
         print(config.name + " exists, skipping...")
         return
 
+    print("building " + config.name + " ----------------------------------------------")
+
     cmakeconfig = "cmake " + " ".join(config.cmake_args())
 
     print(cmakeconfig)
