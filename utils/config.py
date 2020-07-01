@@ -6,6 +6,7 @@ class Config(object):
         self.__dict__.update(params)
         self.name = name
         self.force = False
+        self.additional_cmake_args = []
 
         self.defaults()
         self.check()
@@ -66,6 +67,5 @@ def repopath(arg0: str):
 
     # here we assume that this script is in /scripts/src
     rp = os.path.join(absp, os.pardir) 
-    rp = os.path.join(rp, os.pardir)
 
-    return rp
+    return os.path.abspath(rp)

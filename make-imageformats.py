@@ -31,8 +31,6 @@ class FormatsConfig(Config):
 
         return args
 
-        return os.path.join(self.builddir, "Release", self.name + ".dll")
-
 def make(params):
 
     params['install'] = False
