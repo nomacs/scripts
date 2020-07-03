@@ -244,7 +244,12 @@ class FormatsConfig(Config):
         if "libpath" not in self.__dict__ or not self.libpath:
             self.libpath = os.path.join(self.repopath, "build")
 
+        # only build release for imageformats        
+        self.buildconfig = "release"
+
         super().defaults()
+
+
 
     def cmake_args(self):
 
