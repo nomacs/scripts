@@ -196,22 +196,22 @@ def make(params):
     print(opencv)
     build(opencv)
 
-    # Exiv2
-    expat = ExpatConfig(params)
-    build(expat)
+    # # Exiv2
+    # expat = ExpatConfig(params)
+    # build(expat)
     
-    exiv2 = ExifConfig(params)
-    exiv2.additional_cmake_args = opencv.cmake_zlib()
-    build(exiv2)
+    # exiv2 = ExifConfig(params)
+    # exiv2.additional_cmake_args = opencv.cmake_zlib()
+    # build(exiv2)
 
-    # libraw
-    libraw = LibrawConfig(params)
-    build(libraw)
+    # # libraw
+    # libraw = LibrawConfig(params)
+    # build(libraw)
 
-    # quazip
-    quazip = QuazipConfig(params)
-    quazip.additional_cmake_args = opencv.cmake_zlib()
-    build(quazip)
+    # # quazip
+    # quazip = QuazipConfig(params)
+    # quazip.additional_cmake_args = opencv.cmake_zlib()
+    # build(quazip)
 
     # uncomment for debugging
     # print(expat)
