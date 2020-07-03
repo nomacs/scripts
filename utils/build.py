@@ -2,6 +2,10 @@
 def build(config):
     import subprocess as sp
 
+    if config.project != "all" and config.name not in config.project:
+        print(config.name + " not selected for building, skipping...")
+        return
+
     if config.is_built():
         print(config.name + " exists, skipping...")
         return
