@@ -23,18 +23,18 @@ def build(config):
         print("[ERROR] cmake config failed - aborting...")
         exit(1)
 
-    if config.cmakeonly:
-        print("\"cmakeonly\" specified -> done")
+    if config.configure:
+        print("\"configure\" specified -> done")
         return
 
     # build release
-    sp.run("cmake --build %s --config Release -- -m" %
-           (config.builddir), check=True)
+    sp.run("cmake --build %s --config Release %s -- -m" %
+           (config.builddir, " ".join(config.cmake_build_args())), check=True)
 
     # build debug?!
     if config.buildconfig.lower() == "debug":
-        sp.run("cmake --build %s --config Debug -- -m" %
-               (config.builddir), check=True)
+        sp.run("cmake --build %s --config Debug %s -- -m" %
+               (config.builddir, " ".join(config.cmake_build_args())), check=True)
 
     # install
     if config.install:

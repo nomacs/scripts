@@ -165,6 +165,14 @@ class QuazipConfig(Config):
 
         return args
 
+    def cmake_build_args(self):
+
+        # only build shared lib
+        args = [
+            "--target quazip5"
+        ]
+
+        return args
 
 class OpenCVConfig(Config):
 
@@ -231,14 +239,21 @@ class FormatsConfig(Config):
     def __init__(self, params, name: str):
         super().__init__(params, name)
 
+    def defaults(self):
+
+        if "libpath" not in self.__dict__ or not self.libpath:
+            self.libpath = os.path.join(self.repopath, "build")
+
+        super().defaults()
+
     def cmake_args(self):
 
         # tune cmake parameters here
         args = [
             "--clean-first",
             "-DCMAKE_PREFIX_PATH=" +
-            os.path.join(self.builddir, "libde265") + ";" +
-            os.path.join(self.builddir, "libheif") + ";" +
+            os.path.join(self.libpath, "libde265") + ";" +
+            os.path.join(self.libpath, "libheif") + ";" +
             self.qtpath,
             "-B" + self.builddir,
             self.srcpath
@@ -254,7 +269,6 @@ def make_libs(params):
 
     opencv = OpenCVConfig(params)
     # some script debugging options:
-    # opencv.cmakeonly = True
     # opencv.force = True
     print(opencv)
     build(opencv)
@@ -282,7 +296,6 @@ def make_libs(params):
 def make_imageformats(params):
     
     params['install'] = False
-    # params['cmakeonly'] = True
 
     # config libde265 which we need for libheif
     libde265 = FormatsConfig(params, "libde265")
@@ -298,6 +311,7 @@ def make_imageformats(params):
     
     # configure image formats
     params["srcpath"] = params["repopath"]
+    params['install'] = True
     imageformats = FormatsConfig(params, "imageformats")
     build(imageformats)
 
@@ -314,6 +328,7 @@ def configure_libs(p, config):
 
     make_libs(p)
 
+    p['libpath']  = config.libpath + "/imageformats"
     p['repopath'] = config.repopath + "/3rd-party/imageformats"
     p['builddir'] = config.repopath + "/3rd-party/build/imageformats"
 
@@ -342,6 +357,11 @@ if __name__ == "__main__":
                         help='build configuration [debug|release]')
     parser.add_argument('--project', dest='project', type=str, default="all",
                         help='comma separated name of the project(s) to be built (\'all\' will build everything)')
+    parser.add_argument('--force', action='store_true',
+                    help='forces building the project')
+    parser.add_argument('--configure', action='store_true',
+                        help='if set, projects are only configured rather than built')
+
 
     # make args a dict
     params = vars(parser.parse_args())

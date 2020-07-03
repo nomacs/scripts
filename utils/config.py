@@ -18,11 +18,12 @@ class Config(object):
 
             p = self.__dict__[key]
 
-            if key.endswith("path"):
-                if not os.path.exists(p):
-                    print("[WARNING] %s path does not exist: %s" % (key, p))
-                else:
-                    self.__dict__[key] = Config.normpath(p)
+            if p:
+                if key.endswith("path"):
+                    if not os.path.exists(p):
+                        print("[WARNING] %s path does not exist: %s" % (key, p))
+                    else:
+                        self.__dict__[key] = Config.normpath(p)
 
         if "builddir" in self.__dict__:
             self.builddir = Config.normpath(self.builddir)
@@ -67,6 +68,10 @@ class Config(object):
 
     def cmake_args(self):
 
+        return ""
+
+    def cmake_build_args(self):
+    
         return ""
 
     def __str__(self):
