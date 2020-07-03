@@ -2,7 +2,7 @@
 def build(config):
     import subprocess as sp
 
-    if config.project != "all" and config.name not in config.project:
+    if "all" not in config.project and config.name not in config.project:
         print(config.name + " not selected for building, skipping...")
         return
 

@@ -1,5 +1,5 @@
 import os
-from utils.baseconfig import Config
+from utils.config import Config
 
 class NomacsConfig(Config):
 
@@ -324,7 +324,7 @@ if __name__ == "__main__":
     import argparse
     import sys
     
-    from utils.baseconfig import repopath
+    from utils.config import repopath
     from utils.build import build
 
     parser = argparse.ArgumentParser(

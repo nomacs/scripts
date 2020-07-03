@@ -68,7 +68,7 @@ def copytree(src: str, dst: str, ext: str = "", symlinks: bool = False, ignore: 
 if __name__ == "__main__":
     import argparse
     import sys, os
-    from utils.baseconfig import repopath
+    from utils.config import repopath
 
     parser = argparse.ArgumentParser(
         description='packs nomacs portable.')
