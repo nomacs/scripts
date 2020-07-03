@@ -22,9 +22,17 @@ class Config(object):
                 if not os.path.exists(p):
                     print("[WARNING] %s path does not exist: %s" % (key, p))
                 else:
-                    tmp = os.path.abspath(p)
-                    tmp = tmp.replace("\\", "/")    # cmake has issues with windows path separators
-                    self.__dict__[key] = tmp
+                    self.__dict__[key] = Config.normpath(p)
+
+        if "builddir" in self.__dict__:
+            self.builddir = Config.normpath(self.builddir)
+
+    @staticmethod
+    def normpath(path: str):
+        tmp = os.path.abspath(path)
+        # cmake has issues with windows path separators
+        tmp = tmp.replace("\\", "/")
+        return tmp
 
     def defaults(self):
 

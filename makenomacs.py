@@ -75,8 +75,8 @@ if __name__ == "__main__":
                         help='Specify the build directory')
     parser.add_argument('--build-config', dest='buildconfig', type=str, default="",
                         help='build configuration [debug|release]')
-    parser.add_argument('--all', action='store_true',
-                        help='build all dependencies')
+    parser.add_argument('--project', dest='project', type=str, default="all",
+                        help='name of the project to be built (all will build everything)')
 
     # make args a dict
     params = vars(parser.parse_args())
@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     c = NomacsConfig(params)
 
-    if params['all']:
+    if params['project'] == 'all':
         make_libs(c)
 
     # uncomment for debugging
