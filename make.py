@@ -244,12 +244,10 @@ class FormatsConfig(Config):
         if "libpath" not in self.__dict__ or not self.libpath:
             self.libpath = os.path.join(self.repopath, "build")
 
-        # only build release for imageformats        
+        # only build release for imageformats
         self.buildconfig = "release"
 
         super().defaults()
-
-
 
     def cmake_args(self):
 
@@ -298,22 +296,25 @@ def make_libs(params):
     # uncomment for debugging
     # print(expat)
 
+
 def make_imageformats(params):
-    
+
     params['install'] = False
 
     # config libde265 which we need for libheif
     libde265 = FormatsConfig(params, "libde265")
     libde265.builddir = os.path.join(libde265.builddir, libde265.name)
-    libde265.binaryfile = os.path.join(libde265.builddir, libde265.name, "Release", libde265.name + ".dll")
+    libde265.binaryfile = os.path.join(
+        libde265.builddir, libde265.name, "Release", libde265.name + ".dll")
     build(libde265)
-    
+
     # config libheif
     libheif = FormatsConfig(params, "libheif")
     libheif.builddir = os.path.join(libheif.builddir, libheif.name)
-    libheif.binaryfile = os.path.join(libheif.builddir, "libheif", "Release", "heif.dll")
+    libheif.binaryfile = os.path.join(
+        libheif.builddir, "libheif", "Release", "heif.dll")
     build(libheif)
-    
+
     # configure image formats
     params["srcpath"] = params["repopath"]
     params['install'] = True
@@ -325,6 +326,7 @@ def make_imageformats(params):
     # print(libheif)
     # print(imageformats)
 
+
 def configure_libs(p, config):
     # from makelibs import make as ml
     # from makeimageformats import make as mi
@@ -333,7 +335,7 @@ def configure_libs(p, config):
 
     make_libs(p)
 
-    p['libpath']  = config.libpath + "/imageformats"
+    p['libpath'] = config.libpath + "/imageformats"
     p['repopath'] = config.repopath + "/3rd-party/imageformats"
     p['builddir'] = config.repopath + "/3rd-party/build/imageformats"
 
@@ -343,7 +345,7 @@ def configure_libs(p, config):
 if __name__ == "__main__":
     import argparse
     import sys
-    
+
     from utils.config import repopath
     from utils.build import build
 
@@ -363,10 +365,9 @@ if __name__ == "__main__":
     parser.add_argument('--project', dest='project', type=str, default="all",
                         help='comma separated name of the project(s) to be built (\'all\' will build everything)')
     parser.add_argument('--force', action='store_true',
-                    help='forces building the project')
+                        help='forces building the project')
     parser.add_argument('--configure', action='store_true',
                         help='if set, projects are only configured rather than built')
-
 
     # make args a dict
     params = vars(parser.parse_args())
@@ -379,7 +380,9 @@ if __name__ == "__main__":
 
     c = NomacsConfig(params)
 
-    configure_libs(params, c)
+    # only build libs if they were not specified
+    if not params['libpath']:
+        configure_libs(params, c)
 
     # uncomment for debugging
     print(c)
